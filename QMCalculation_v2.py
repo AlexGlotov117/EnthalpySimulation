@@ -18,18 +18,18 @@ from openff.toolkit.topology import Molecule, Topology
 # --- 1. Define Simulation Parameters and Input Data ---
 
 # Parameters
-TEMPERATURE = 200.0 * unit.kelvin        # Liquid Methane temp (above Tm=90.7 K)
+TEMPERATURE = 294.0 * unit.kelvin
 PRESSURE = 1.0 * unit.bar
 SIMULATION_STEPS = 50000              # 1 ns of simulation (500,000 steps * 2 fs/step)
 # N_MOLECULES = 1000                      # Number of molecules in the simulation box
 # TARGET_DENSITY = 0.73 * unit.gram/unit.milliliter # Approximate liquid NH3 density
 
 # %%
-monomer_molecule = Molecule.from_pdb_and_smiles('ammonia.pdb', 'N')
+monomer_molecule = Molecule.from_pdb_and_smiles('water.pdb', 'O')
 
 unique_molecules = [monomer_molecule]
 
-pdb = PDBFile('liquid_ammonia_packed.pdb')
+pdb = PDBFile('liquid_water_packed.pdb')
 
 openff = OpenFFForceField('openff-2.1.0.offxml') 
 
@@ -46,6 +46,14 @@ integrator = LangevinMiddleIntegrator(TEMPERATURE, 1/unit.picosecond, 0.002*unit
 
 simulation = Simulation(pdb.topology, system, integrator)
 simulation.context.setPositions(pdb.positions)
+
+# Set Box Vectors based on the solid PDB (Critical for PBC)
+box_vectors = pdb.topology.getPeriodicBoxVectors()
+simulation.context.setPeriodicBoxVectors(*box_vectors)
+
+# Run Minimization (Crucial for crystals)
+print("Minimizing energy...")
+simulation.minimizeEnergy()
 
 barostat = MonteCarloBarostat(PRESSURE, TEMPERATURE, 25) 
 system.addForce(barostat)
