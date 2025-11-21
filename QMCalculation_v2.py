@@ -19,7 +19,7 @@ from openff.toolkit.topology import Molecule, Topology
 # --- 1. Define Simulation Parameters and Input Data ---
 
 # Parameters
-TEMPERATURE = 294.14 * unit.kelvin
+TEMPERATURE = 273.15 * unit.kelvin
 #TEMPERATURE = 250.0 * unit.kelvin
 PRESSURE = 1.0 * unit.bar
 SIMULATION_STEPS = 50000              # 1 ns of simulation (500,000 steps * 2 fs/step)
@@ -31,7 +31,7 @@ monomer_molecule = Molecule.from_pdb_and_smiles('water.pdb', 'O')
 
 unique_molecules = [monomer_molecule]
 
-pdb = PDBFile('liquid_water_packed.pdb')
+pdb = PDBFile('ice_supercell_4x4x4.pdb')
 
 openff = OpenFFForceField('openff-2.1.0.offxml') 
 
@@ -63,7 +63,7 @@ system.addForce(barostat)
 simulation.context.reinitialize(preserveState=True)
 
 simulation.reporters.append(DCDReporter('output.dcd', 1000))
-simulation.reporters.append(StateDataReporter('output_liquid.log', 1000, 
+simulation.reporters.append(StateDataReporter('output_solid.log', 1000, 
     step=True, potentialEnergy=True, temperature=True, 
     volume=True, totalEnergy=True
 ))

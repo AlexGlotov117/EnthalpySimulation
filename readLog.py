@@ -2,7 +2,7 @@ import openmm.unit as unit
 import pandas as pd
 
 # --- 1. Define Constants and Target Pressure ---
-LOG_FILE = 'output.log'
+LOG_FILE = 'output_solid.log'
 PROD_START_STEP = 25000 
 N_MOLECULES = 3072
 N_A = 6.02214076e23 / unit.mole
