@@ -9,3 +9,10 @@ ammonia - Copy.pdbZone.Identifier
 ice.pdb
 ice.pdbZone.Identifier
 liquid_water_packed.pdb
+ice_28unitCell.pdb
+ice_28unitCell.pdbZone.Identifier
+solid_ice_packed.pdb
+ice_supercell_4x4x4.pdb
+ice_supercell_4x4x4.xyz
+output_liquid.log
+output_solid.log
