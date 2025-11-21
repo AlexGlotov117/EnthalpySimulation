@@ -3,17 +3,17 @@ import pandas as pd
 
 # --- 1. Define Constants and Target Pressure ---
 LOG_FILE = 'output.log'
-PROD_START_STEP = 20000 
-N_MOLECULES = 1000
+PROD_START_STEP = 25000 
+N_MOLECULES = 3072
 N_A = 6.02214076e23 / unit.mole
 N_MOLES= N_MOLECULES / N_A
 pressure = 1.0*unit.bar # Target pressure (e.g., standard pressure for liquid)
 
 # --- 2. Load and Average Data ---
 data = pd.read_csv(LOG_FILE, sep=',', header=0) # Adjust skiprows as needed
-prod_data = data[data['Step'] >= PROD_START_STEP]
+prod_data = data[data['#"Step"'] >= PROD_START_STEP]
 
-avg_U = prod_data['Total Energy (kJ/mole)'].mean() * unit.kilojoule_per_mole
+avg_U = prod_data['Total Energy (kJ/mole)'].mean() * unit.kilojoule_per_mole / N_MOLECULES
 avg_V = prod_data['Box Volume (nm^3)'].mean() * (unit.nanometer)**3
 
 # --- 3. Calculate Molar Enthalpy (H_molar) ---

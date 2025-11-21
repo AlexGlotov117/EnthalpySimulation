@@ -1,5 +1,6 @@
 # %%
 # .QM\Scripts\Activate.ps1
+# eval "$(/home/aglotov/miniconda3/bin/conda shell.bash hook)"
 
 # Repo contains scripts used to calculate enthalpy for gaseous stand alone molecule, bulk randomly sorted liquid phase molecules, and bulk crystal lattice solid phase molecules using a combination of quantum mechanics and molecular dynamics.
 
@@ -18,7 +19,8 @@ from openff.toolkit.topology import Molecule, Topology
 # --- 1. Define Simulation Parameters and Input Data ---
 
 # Parameters
-TEMPERATURE = 294.0 * unit.kelvin
+TEMPERATURE = 294.14 * unit.kelvin
+#TEMPERATURE = 250.0 * unit.kelvin
 PRESSURE = 1.0 * unit.bar
 SIMULATION_STEPS = 50000              # 1 ns of simulation (500,000 steps * 2 fs/step)
 # N_MOLECULES = 1000                      # Number of molecules in the simulation box
@@ -58,8 +60,10 @@ simulation.minimizeEnergy()
 barostat = MonteCarloBarostat(PRESSURE, TEMPERATURE, 25) 
 system.addForce(barostat)
 
+simulation.context.reinitialize(preserveState=True)
+
 simulation.reporters.append(DCDReporter('output.dcd', 1000))
-simulation.reporters.append(StateDataReporter('output.log', 1000, 
+simulation.reporters.append(StateDataReporter('output_liquid.log', 1000, 
     step=True, potentialEnergy=True, temperature=True, 
     volume=True, totalEnergy=True
 ))
